@@ -7,7 +7,11 @@ st.title("📦 재고 수불 대시보드")
 
 uploaded_file = st.file_uploader("📤 재고등급 포함 엑셀 업로드", type=["xlsx"])
 
-if uploaded_file:
+# 기본 엑셀 파일 설정
+if uploaded_file is None:
+    uploaded_file = "Streamlit_재고등급_포함.xlsx"
+
+try:
     df = pd.read_excel(uploaded_file)
     df['날짜'] = pd.to_datetime(df['날짜'], errors='coerce')
 
@@ -49,5 +53,5 @@ if uploaded_file:
     else:
         st.dataframe(df)
 
-else:
-    st.info("⬆️ 좌측에서 재고등급 포함 엑셀파일을 업로드해주세요.")
+except Exception as e:
+    st.error(f"파일을 불러오는 중 오류가 발생했습니다: {e}")
